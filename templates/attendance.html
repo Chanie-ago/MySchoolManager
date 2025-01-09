@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kehadiran Siswa</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --success: #10b981;
+            --success-dark: #059669;
+            --danger: #ef4444;
+            --accent: #6366f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+
+        nav {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a:hover {
+            background-color: #f3f4f6;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .attendance-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        input, select {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .download-btn {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .attendance-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .attendance-card {
+            background-color: white;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-icon {
+            font-size: 1.25rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .status-present {
+            background-color: #dcfce7;
+            color: var(--success);
+        }
+
+        .status-absent {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .attendance-info {
+            flex-grow: 1;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .attendance-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/"><i class="fas fa-users"></i> Siswa</a>
+            <a href="/grades"><i class="fas fa-star"></i> Nilai</a>
+            <a href="/attendance"><i class="fas fa-calendar-check"></i> Kehadiran</a>
+            <a href="/library_loans"><i class="fas fa-book"></i> Peminjaman Perpustakaan</a>
+            <a href="/classes"><i class="fas fa-chalkboard"></i> Kelas</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Kehadiran Siswa</h1>
+            <a href="/download_attendance" class="btn download-btn">
+                <i class="fas fa-download"></i>
+                Unduh Data Kehadiran (CSV)
+            </a>
+        </div>
+
+        <div class="card">
+            <form method="POST" class="attendance-form">
+                <div class="form-group">
+                    <label for="student_id">Nama Siswa</label>
+                    <select id="student_id" name="student_id" required>
+                        <option value="">Pilih Siswa</option>
+                        {% for student in students %}
+                            <option value="{{ student[0] }}">{{ student[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Tanggal</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Tambah Kehadiran
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="attendance-grid">
+            {% for record in attendance %}
+                <div class="attendance-card">
+                    <div class="status-icon {{ 'status-present' if record[3] == 'Hadir' else 'status-absent' }}">
+                        <i class="fas {{ 'fa-check' if record[3] == 'Hadir' else 'fa-times' }}"></i>
+                    </div>
+                    <div class="attendance-info">
+                        <div class="student-name">{{ record[1] }}</div>
+                        <div class="attendance-date">{{ record[2] }} - {{ record[3] }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
